@@ -1,0 +1,31 @@
+name: sync algorythm src
+on:
+  repository_dispatch:
+    types: [a-src-updated]
+jobs:
+  copy-target:
+    name: sync algorithm src
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: clone algo repo
+        uses: actions/checkout@v2
+        with:
+          repository: GrykT/Actions1
+          path: Actions1
+          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: copy src
+        run: cp -R Actions1/src src
+      - name: clean Actions1
+        run: rm -rf Actions1
+      - name: create PR
+        uses: peter-evans/create-pull-request@v3
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+          commit-message: 'update algorithm src'
+          branch: algorithm_src
+          branch-suffix: timestamp
+          delete-branch: true
+          title: 'update algorithm src'
