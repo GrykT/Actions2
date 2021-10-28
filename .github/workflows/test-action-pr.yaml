@@ -20,6 +20,7 @@ jobs:
       - name: clean Actions1
         run: rm -rf Actions1
       - name: create PR
+        id: cpr
         uses: peter-evans/create-pull-request@v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -30,6 +31,12 @@ jobs:
           delete-branch: true
           title: 'update algorithm src'
       - name: assigne
-        uses: kentaro-m/auto-assign-action@v1.2.0
-        with:
-          configuration-path: ".github/alrorithm_src_update_reviewer.yaml"
+        env:
+          REVIEWERS: "GrykT"
+        run: |
+            reviewers=$(echo "\"${REVIEWERS// /}\"" | jq 'split(",")')
+            curl -X POST \
+                 -H "Content-Type: application/json" \
+                 -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+                 -d "{ \"reviewers\": $reviewers }" \
+                 https://api.github.com/repos/${{ github.repository }}/pulls/${{ steps.cpr.outputs.pull-request-number }}/requested_reviewers
