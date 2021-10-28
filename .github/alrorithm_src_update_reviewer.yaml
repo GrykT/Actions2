@@ -1,0 +1,6 @@
+addReviewers: true
+addAssignees: false
+numberOfReviewers: 0
+useReviewGroups: true
+reviewers:
+  - GrykT

@@ -29,3 +29,7 @@ jobs:
           branch-suffix: timestamp
           delete-branch: true
           title: 'update algorithm src'
+      - name: assigne
+        uses: kentaro-m/auto-assign-action@v1.2.0
+        with:
+          configuration-path: ".github/alrorithm_src_update_reviewer.yaml"
